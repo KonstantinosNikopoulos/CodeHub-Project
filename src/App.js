@@ -1,8 +1,17 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Button from "react-bootstrap/Button";
+import Dashboard from "./Dashboard";
+
+
+
+
 function App() {
   return (
-    <div className="App">
-      <h1>Codehub React App</h1>
-    </div>
+    <React.Fragment>
+      <Dashboard />
+    </React.Fragment>
   );
 }
 
