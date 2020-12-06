@@ -1,0 +1,10 @@
+.stat{
+    border: 1px solid #f1f1f1;
+    margin: 10px 0 40px 0;
+    padding: 10px;
+}
+
+.last5{
+    background-color: #f1f1f1;
+    padding: 10px;
+}

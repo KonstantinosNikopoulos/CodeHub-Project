@@ -79,7 +79,7 @@ function AddCourse() {
             <hr/>
 
             <Form.Group>
-               <Button class="btn btn-primary"> Add Course</Button>
+               <Button class="btn btn-primary float-right"> Add Course</Button>
             </Form.Group>
             
 
