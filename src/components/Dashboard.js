@@ -52,7 +52,11 @@ const Last5 = () => {
     return (
       <React.Fragment>
         <div className="last5">Last 5 Courses</div>
+<<<<<<< HEAD
         <Table bordered hover>
+=======
+        <Table bordered hover style={{marginBottom : "0px"}}>
+>>>>>>> main
             <thead>
                 <tr>
                 <th></th>
@@ -74,6 +78,12 @@ const Last5 = () => {
                 </tr>
             </tbody>
         </Table>
+<<<<<<< HEAD
+=======
+        <div className="viewall">
+            <Button class="btn btn-primary">View All</Button>
+        </div>
+>>>>>>> main
       </React.Fragment>
     );      
 }
