@@ -1,12 +1,8 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import FormGroup from 'react-bootstrap/FormGroup';
 
-
-//import {  Label, Input, FormText } from 'react-bootstrap';
 
 
 function AddCourse() {
@@ -79,7 +75,7 @@ function AddCourse() {
             <hr/>
 
             <Form.Group>
-               <Button class="btn btn-primary float-right"> Add Course</Button>
+               <Button className="btn btn-primary float-right"> Add Course</Button>
             </Form.Group>
             
 

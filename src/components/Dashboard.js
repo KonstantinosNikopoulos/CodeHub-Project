@@ -1,94 +1,174 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, {useState, useEffect}  from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
 import Jumbotron from "react-bootstrap/Jumbotron";
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
-import './Dashboard.css'
+import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
+import { FcInfo } from 'react-icons/fc';
+import { BsCheck, BsX } from 'react-icons/bs';
+import Moment from 'moment';
+import {Link} from "react-router-dom";
 
-const Navigation = () => {
-    return (
-        <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="#home">Code.Hub Dashboard</Navbar.Brand>
-        <Nav className="ml-auto" >
-            <Nav.Link href="">Courses</Nav.Link>
-            <Nav.Link href="">Add new course</Nav.Link>
-        </Nav>
-     </Navbar>
-    )
-}
+import axios from "axios";
+
 
 const Welcome = () => {
     return (
         <Jumbotron className='mt-4'>
             <h1>Welcome to CodeHub Dashboard!</h1>
-            <p style={{fontSize: "20px"}}>Manage everything and have fun!</p>
-            
+            <p style={{fontSize: "20px"}}>Manage everything and have fun!</p>    
         </Jumbotron>
-    )
+    );
 }
 
-const Stats = () => {
+const Statistics = () => {
+    const [stats, setStats] = useState([]);
+
+        useEffect(() => {
+            axios.get(`http://localhost:3001/stats`)
+            .then(res => {
+                const stats = res.data;
+                setStats(stats);
+            });
+        }, [])
+
     return (
-      <React.Fragment>
-        <Container>
-            <Row>
-                <Col><div className="stat">STUDENTS: 1537</div></Col>
-                <Col><div className="stat">COURSES: 24</div></Col>
-                <Col><div className="stat">INSTRUCTORS: 36</div></Col>
-                <Col><div className="stat">EVENTS: 158</div></Col>
-            </Row>
-        </Container>
-      </React.Fragment>
+        <React.Fragment>
+                <Row>
+                <Col md={1}></Col> 
+                {stats.map(stat => {
+                    return (
+                        <div key={stat.id}>
+                          <Col md={1}></Col>      
+                            <Col md={2}>
+                              <Card style={{ width: '15rem' , height: '4rem'}} className="text-center">
+                                    <Card.Body style={{ textTransform: 'uppercase'}}>{stat.title}: {stat.amount}</Card.Body>
+                               </Card>
+                            </Col>
+                        </div>
+                    )
+                    })
+                }
+                </Row>
+        </React.Fragment>
     );      
 }
 
-const Last5 = () => {
-    return (
-      <React.Fragment>
-        <div className="last5">Last 5 Courses</div>
-        <Table bordered hover style={{marginBottom : "0px"}}>
-            <thead>
-                <tr>
-                <th></th>
-                <th>Title</th>
-                <th>Bookable</th>
-                <th>Price</th>
-                <th>Date</th>
-                <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td>&#8505;</td>
-                <td>Certified Scrum Master</td>
-                <td>&#10004;</td>
-                <td>1100</td>
-                <td>27/9/2019-28/9/2019</td>
-                <td><Button variant="primary">View details</Button>{' '}</td>
-                </tr>
-            </tbody>
-        </Table>
-        <div className="viewall">
-            <Button class="btn btn-primary">View All</Button>
-        </div>
-      </React.Fragment>
-    );      
+const Courses = () => {
+    const [courses, setCourses] = useState([]);
+
+        useEffect(() => {
+            axios.get(`http://localhost:3001/courses`)
+            .then(res => {
+                const courses = res.data;
+                setCourses(courses);
+            });
+        }, [])
+
+
+        // if there are more than 5 courses, show the last 5 with slice
+        // else, show them all
+        if (courses.length > 5) {
+            return (
+                <div>
+                    <h4 className="m-4">Last 5 Courses</h4>
+                    <Table striped hover>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Title</th>
+                            <th>Bookable</th>
+                            <th>Price</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {courses.slice(courses.length - 5, courses.length).map(course => {
+                        const isOpen = course.open;
+                        return (
+                            <tr key={course.id}>
+                                <td><FcInfo /> </td>
+                                <td>{course.title}</td>
+                                <td>{isOpen ? <BsCheck /> : <BsX />}</td>
+                                <td> {Moment(course.dates.start_date).format('DD/MM/YYYY')} - {Moment(course.dates.end_date).format('DD/MM/YYYY')} </td>
+                                <td><Button variant="info">View details</Button></td>
+                            </tr>
+                        )
+                    })
+                    }
+                    </tbody>
+                </Table>
+                <div className="text-center mt-3"> 
+                      <Button variant="primary" size="lg">View All Courses</Button>
+                </div> 
+                </div>
+            )
+        }
+        else {
+            return (
+                <div>
+                    <h4 className="m-4">Last 5 Courses</h4>
+                    <Table striped hover>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Title</th>
+                            <th>Bookable</th>
+                            <th>Price</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {courses.map(course => {
+                        const isOpen = course.open;
+                        return (
+                            <tr key={course.id}>
+                                <td><FcInfo /> </td>
+                                <td>{course.title}</td>
+                                <td>{isOpen ? <BsCheck /> : <BsX />}</td>
+                                <td>{course.price.normal}</td>
+                                <td> {Moment(course.dates.start_date).format('DD/MM/YYYY')} - {Moment(course.dates.end_date).format('DD/MM/YYYY')}</td>
+                                <td>
+                                    <Link to={
+                                        {     
+                                            pathname: '/coursedetails',
+                                            state: course
+                                        }
+                                    }> 
+                                        <Button variant="info">View details</Button>
+                                    </Link>
+                                </td>
+                            </tr>
+                        )
+                    })
+                    
+                    }
+                    </tbody>
+                </Table>
+                <div className="text-center mt-3"> 
+                        <Link to="/courses">
+                           <Button variant="primary" size="lg">View All Courses</Button>
+                        </Link>  
+                </div> 
+            </div>   
+            )
+        }
 }
 
 
 function Dashboard () {
     return (
         <React.Fragment>
-            <Navigation />   
             <Welcome />
-            <Stats/>
-            <Last5/>
+            <Statistics/>
+            <br />
+            <br />
+            <br />
+            <Courses />
          </React.Fragment>
     )
 }
