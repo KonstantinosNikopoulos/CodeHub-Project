@@ -37,14 +37,12 @@ function AddCourse() {
   const handleChangeOpen = (event) => {
         setCourse({...course, 
           [event.target.id]: event.target.checked})
-  
   };
   
   
   const handleChangeInstructors = (event) => {
        const options = course.instructors
        console.log(options)
-  
         if (event.target.checked){
              options.push(event.target.value)
         }
@@ -55,13 +53,26 @@ function AddCourse() {
         setCourse({...course,
           [event.target.id]: options })
           console.log(event.target.id)
-          
-    
-        
   };
+
+	const handleChangeDates = (event) => {
+		const dates = course.dates;
+		const dates_id = "dates";
+		dates[event.target.id] = event.target.value;
+		setCourse({...course, 
+		[dates_id]: dates})
+	};
+
+	const handleChangePrice = (event) => {
+		const price = course.price;
+		const price_id = "price";
+		price[event.target.id] = parseInt(event.target.value);
+		setCourse({...course, 
+		[price_id]: price})
+	};
   
     const handleSubmit = (e) => {
-    // e.preventDefault();
+    	e.preventDefault();
         axios.post(`http://localhost:3001/courses`, course)
         .then(res => {
             console.log(res);
@@ -114,24 +125,24 @@ function AddCourse() {
   
             <h3>Dates</h3>
   
-            <Form.Group onChange={handleChange} controlId="start_date">
+            <Form.Group onChange={handleChangeDates} controlId="start_date">
               <Form.Label>Start date:</Form.Label>
               <Form.Control placeholder="Start date"/>
             </Form.Group>  
   
-            <Form.Group onChange={handleChange} controlId="end_date">
+            <Form.Group onChange={handleChangeDates} controlId="end_date">
               <Form.Label>End date:</Form.Label>
               <Form.Control placeholder="End date"/>
             </Form.Group> 
   
             <hr/>
   
-            <Form.Group onChange={handleChange} controlId="early_bird">
+            <Form.Group onChange={handleChangePrice} controlId="early_bird">
               <Form.Label>Early Bird:</Form.Label>
               <Form.Control placeholder="0"/>
             </Form.Group>  
   
-            <Form.Group onChange={handleChange} controlId="normal">
+            <Form.Group onChange={handleChangePrice} controlId="normal">
               <Form.Label>Normal Price:</Form.Label>
               <Form.Control placeholder="0"/>
             </Form.Group> 
