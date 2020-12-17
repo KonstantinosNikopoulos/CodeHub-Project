@@ -142,7 +142,7 @@ const Courses = () => {
                                 <td><FcInfo /> </td>
                                 <td>{course.title}</td>
                                 <td>{isOpen ? <BsCheck /> : <BsX />}</td>
-                                <td>{course.price.normal}</td>
+                                <td>{course.price.normal} €</td>
                                 <td>{Moment(course.dates.start_date).format('DD/MM/YYYY')} - {Moment(course.dates.end_date).format('DD/MM/YYYY')}</td>
                                 <td>
                                     <Link to={

@@ -42,7 +42,6 @@ function AddCourse() {
   
   const handleChangeInstructors = (event) => {
        const options = course.instructors
-       console.log(options)
   
         if (event.target.checked){
              options.push(event.target.value)
@@ -53,7 +52,6 @@ function AddCourse() {
         }
         setCourse({...course,
           [event.target.id]: options })
-          console.log(event.target.id)
   };
 
   const handleChangeDates = (event) => {
@@ -73,7 +71,7 @@ function AddCourse() {
 	};
   
     const handleSubmit = (e) => {
-     e.preventDefault();
+   //  e.preventDefault();
         axios.post(`http://localhost:3001/courses`, course)
         .then(res => {
             console.log(res);
