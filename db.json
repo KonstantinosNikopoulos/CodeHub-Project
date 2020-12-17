@@ -114,6 +114,7 @@
       "duration": "100 hours in total",
       "open": true,
       "instructors": [
+        "01",
         "02"
       ],
       "description": "During the program, the participants will ‘’unlock’’ up-to-date techniques and new tools for data collection, storage, transformation, use, visualization and data acquisition, acquiring the skills needed to meet the growing need of the modern business world for data scientists, as well as the important demand for specialized scientists that combine hands-on experience in data-related industry fields and understanding of the theoretical and practical background of Business Intelligence (BI) used for the interpretation of data and the support of the decision making process."

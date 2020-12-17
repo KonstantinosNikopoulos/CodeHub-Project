@@ -8,109 +8,9 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { BsCheck, BsX } from 'react-icons/bs';
-import Form from 'react-bootstrap/Form'
+import {Link} from "react-router-dom";
 import Moment from 'moment';
 import axios from "axios";
-
-
-const EditForm = ({ onSubmit, course }) => {
-
-    const [courseName, setCourseName] = useState("");
-    const [duration, setDuration] = useState("");
-    const [path, setPath] = useState("");
-
-    return (
-      <Form onSubmit={onSubmit}>
-        <Form.Group controlId="title">
-          <Form.Label>Title:</Form.Label>
-          <Form.Control
-                type="text"
-                placeholder= {course.title}
-                value={courseName}
-                onChange={(e) => setCourseName(e.target.value)}
-            />
-        </Form.Group>
-  
-        <Form.Group controlId="duration">
-          <Form.Label>Duration:</Form.Label>
-          <Form.Control
-                type="text"
-                placeholder={course.duration}
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-            />
-        </Form.Group>
-
-        <Form.Group controlId="imagePath">
-            <Form.Label>Image path:</Form.Label>
-            <Form.Control
-                type="text"
-                placeholder={course.imagePath}
-                value = {path}
-                onChange={(e) => setPath(e.target.value)} />
-        </Form.Group>
-
-        <Form.Group controlId="bookable">
-          <Form.Check type="checkbox" label="Bookable" />
-        </Form.Group>
-
-        <hr/>
-
-        <h3>Instructors</h3>
-
-        <Form.Group  id="instructors">
-            <Form.Check type="checkbox" label="John Tsevdos" />
-            <Form.Check type="checkbox" label="Yannis Nikolakopoulos" />
-         </Form.Group>
-           
-        <hr/>
-
-        <Form.Group controlId="description">
-            <Form.Label>Description:</Form.Label>
-            <Form.Control 
-                placeholder= {course.description} 
-                as="textarea" 
-                rows="2"/>
-        </Form.Group>  
-
-        <hr/>
-
-        <h3>Dates</h3>
-
-        <Form.Group controlId="start_date">
-              <Form.Label>Start date:</Form.Label>
-              <Form.Control placeholder={course.dates.start_date}/>
-        </Form.Group>  
-
-        <Form.Group controlId="end_date">
-              <Form.Label>End date:</Form.Label>
-              <Form.Control placeholder={course.dates.end_date}/>
-        </Form.Group> 
-
-        <hr/>
-
-        <Form.Group controlId="early_bird">
-              <Form.Label>Early Bird:</Form.Label>
-              <Form.Control placeholder={course.price.early_bird}/>
-        </Form.Group>  
-
-        <Form.Group controlId="normal">
-              <Form.Label>Normal Price:</Form.Label>
-              <Form.Control placeholder={course.price.normal} />
-        </Form.Group> 
-
-        <hr/>
-
-        <Form.Group>
-               <Button type="submit" className="btn btn-primary float-right"> Add Course</Button>
-        </Form.Group>
-
-      </Form>
-    );
-  };
-
-
-
 
 
 
@@ -121,6 +21,7 @@ function Details () {
     const courseInstructorsID = location.state.instructors;
 
     const [instructors, setInstructors] = useState([]);
+
 
     useEffect(() => {
         axios.get(`http://localhost:3001/instructors`)
@@ -136,20 +37,16 @@ function Details () {
     });
 
 
-    const [edit, setEdit] = useState(false);
+
     const [deleteCourse, setDeleteCourse] = useState(false);
 
-    const handleEdit = () => setEdit(true);
+
     const handleDelete = () => setDeleteCourse(true);
 
-    const handleClose = () => setEdit(false);
+
     const handleCloseDelete = () => setDeleteCourse(false);
 
-    const onEditFormSubmit = (e) => {
-        e.preventDefault();
-        handleClose();
-    };
-
+ 
 
 
     return (
@@ -178,20 +75,16 @@ function Details () {
             <Row >
                 <Col>
                      {/* EDIT COURSE BUTTON  */}
-                     <Button variant="primary" size="lg" onClick={handleEdit}>Edit</Button>{' '}
-                     <Modal show={edit} size="lg" onHide={handleClose}>
-                        <Modal.Header closeButton>
-                             <Modal.Title>Edit Course: {location.state.title}</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                             <EditForm onSubmit={onEditFormSubmit} course={location.state} />
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
-                                 Close Modal
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
+                     
+                     <Link to={
+                                        {     
+                                            pathname: '/editcourse',
+                                            state: location.state
+                                        }
+                                    }> 
+                                        <Button variant="primary" size="lg" >Edit</Button>{' '}
+                    </Link>
+
 
                     {/* DELETE COURSE BUTTON */}
                     <Button variant="danger" size="lg" onClick={handleDelete}>Delete</Button>
