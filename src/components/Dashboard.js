@@ -93,8 +93,18 @@ const Courses = () => {
                                 <td><FcInfo /> </td>
                                 <td>{course.title}</td>
                                 <td>{isOpen ? <BsCheck /> : <BsX />}</td>
+                                <td>{course.price.normal}</td>
                                 <td> {Moment(course.dates.start_date).format('DD/MM/YYYY')} - {Moment(course.dates.end_date).format('DD/MM/YYYY')} </td>
-                                <td><Button variant="info">View details</Button></td>
+                                <td>
+                                    <Link to={
+                                        {     
+                                            pathname: '/coursedetails',
+                                            state: course
+                                        }
+                                    }> 
+                                        <Button variant="info">View details</Button>
+                                    </Link>
+                                </td>
                             </tr>
                         )
                     })
@@ -102,8 +112,10 @@ const Courses = () => {
                     </tbody>
                 </Table>
                 <div className="text-center mt-3"> 
-                      <Button variant="primary" size="lg">View All Courses</Button>
-                </div> 
+                        <Link to="/courses">
+                           <Button variant="primary" size="lg">View All Courses</Button>
+                        </Link>  
+                </div>  
                 </div>
             )
         }
@@ -131,7 +143,7 @@ const Courses = () => {
                                 <td>{course.title}</td>
                                 <td>{isOpen ? <BsCheck /> : <BsX />}</td>
                                 <td>{course.price.normal}</td>
-                                <td> {Moment(course.dates.start_date).format('DD/MM/YYYY')} - {Moment(course.dates.end_date).format('DD/MM/YYYY')}</td>
+                                <td>{Moment(course.dates.start_date).format('DD/MM/YYYY')} - {Moment(course.dates.end_date).format('DD/MM/YYYY')}</td>
                                 <td>
                                     <Link to={
                                         {     
@@ -149,6 +161,7 @@ const Courses = () => {
                     }
                     </tbody>
                 </Table>
+
                 <div className="text-center mt-3"> 
                         <Link to="/courses">
                            <Button variant="primary" size="lg">View All Courses</Button>

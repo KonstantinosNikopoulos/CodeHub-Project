@@ -15,7 +15,6 @@ import axios from "axios";
 
 const EditForm = ({ onSubmit, course }) => {
 
-   console.log(course.title)
     const [courseName, setCourseName] = useState("");
     const [duration, setDuration] = useState("");
     const [path, setPath] = useState("");
