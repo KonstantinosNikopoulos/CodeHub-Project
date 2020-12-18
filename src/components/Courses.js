@@ -23,7 +23,7 @@ function Courses() {
     return (
         <React.Fragment>
             <br/>
-            <h1>All Courses</h1>
+            <h1 className="ml-3">All Courses</h1>
             <br/>
             <Row className="ml-3 ml-lg-0">
             {courses.map(course => {
