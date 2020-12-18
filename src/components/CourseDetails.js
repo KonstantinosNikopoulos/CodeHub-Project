@@ -1,5 +1,5 @@
 import React, {useState, useEffect}  from "react";
-import {useLocation} from 'react-router-dom';
+import {useLocation, Redirect} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Image from 'react-bootstrap/Image';
 import Container from 'react-bootstrap/Container';
@@ -16,6 +16,7 @@ import axios from "axios";
 
 
 function Details () {
+    const [redirect, setRedirect] = useState(false);
     let location = useLocation();
     const isOpen = location.state.open;
     const courseInstructorsID = location.state.instructors;
@@ -38,16 +39,25 @@ function Details () {
 
 
 
-    const [deleteCourse, setDeleteCourse] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
 
+    const handleDeleteModal = () => setDeleteModal(true);
 
-    const handleDelete = () => setDeleteCourse(true);
-
-
-    const handleCloseDelete = () => setDeleteCourse(false);
+    const handleClose = () => setDeleteModal(false);
 
  
+    const handleDelete = (e) => {
+        e.preventDefault();
+        axios.delete(`http://localhost:3001/courses/` + location.state.id)
+        .then(res => {
+            setRedirect(true);
+        });
+    }
 
+     //  REDIRECT TO ALL COURSES PAGE WHEN UPDATE IS CLICKED
+     if (redirect) {
+        return <Redirect to='/courses'/>;
+     }
 
     return (
         <Container className="ml-2">
@@ -75,7 +85,6 @@ function Details () {
             <Row >
                 <Col>
                      {/* EDIT COURSE BUTTON  */}
-                     
                      <Link to={
                                         {     
                                             pathname: '/editcourse',
@@ -87,17 +96,17 @@ function Details () {
 
 
                     {/* DELETE COURSE BUTTON */}
-                    <Button variant="danger" size="lg" onClick={handleDelete}>Delete</Button>
-                    <Modal show={deleteCourse} onHide={handleCloseDelete}>
+                    <Button variant="danger" size="lg" onClick={handleDeleteModal}>Delete</Button>
+                    <Modal show={deleteModal} onHide={handleClose}>
                         <Modal.Header closeButton>
                           <Modal.Title>Delete Course</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>Are you sure you want to delete the {location.state.title} course?</Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={handleCloseDelete}>
+                            <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>
-                            <Button variant="primary" onClick={handleCloseDelete}>
+                            <Button variant="primary" onClick={handleDelete}>
                                 Delete
                             </Button>
                         </Modal.Footer>
