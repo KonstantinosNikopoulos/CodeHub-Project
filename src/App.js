@@ -11,11 +11,13 @@ import CourseDetails from "./components/CourseDetails";
 import EditCourse from "./components/EditCourse";
 
 import { Route, Switch } from "react-router-dom"
+import ScrollRestoration from 'react-scroll-restoration'
 
 function App() {
   return (
     <main>
        <AppNavigation />
+       <ScrollRestoration />
        <Switch>
          <Route path="/" component={Dashboard} exact />
          <Route path="/courses" component={Courses} />
@@ -29,4 +31,3 @@ function App() {
 }
 
 export default App;
-
