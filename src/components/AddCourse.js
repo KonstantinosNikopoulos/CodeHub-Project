@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {Redirect} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
@@ -7,6 +8,8 @@ import axios from 'axios';
 
 
 function AddCourse() {
+
+  const [redirect, setRedirect] = useState(false);
 
   const [course, setCourse] = useState(
     {
@@ -71,13 +74,20 @@ function AddCourse() {
 	};
   
     const handleSubmit = (e) => {
-   //  e.preventDefault();
+        e.preventDefault();
         axios.post(`http://localhost:3001/courses`, course)
         .then(res => {
             console.log(res);
             console.log(res.data);
+            setRedirect(true);
         });
     };
+
+
+    //  REDIRECT TO DASHBOARD PAGE WHEN ADD COURSE IS CLICKED
+    if (redirect) {
+      return <Redirect to='/'/>;
+    }
   
     return (
       <React.Fragment>
