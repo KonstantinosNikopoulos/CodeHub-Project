@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import FormGroup from 'react-bootstrap/FormGroup';
 import axios from 'axios';
 
 
@@ -37,12 +36,13 @@ function AddCourse() {
   const handleChangeOpen = (event) => {
         setCourse({...course, 
           [event.target.id]: event.target.checked})
+  
   };
   
   
   const handleChangeInstructors = (event) => {
        const options = course.instructors
-       console.log(options)
+  
         if (event.target.checked){
              options.push(event.target.value)
         }
@@ -52,10 +52,9 @@ function AddCourse() {
         }
         setCourse({...course,
           [event.target.id]: options })
-          console.log(event.target.id)
   };
 
-	const handleChangeDates = (event) => {
+  const handleChangeDates = (event) => {
 		const dates = course.dates;
 		const dates_id = "dates";
 		dates[event.target.id] = event.target.value;
@@ -72,7 +71,7 @@ function AddCourse() {
 	};
   
     const handleSubmit = (e) => {
-    	e.preventDefault();
+   //  e.preventDefault();
         axios.post(`http://localhost:3001/courses`, course)
         .then(res => {
             console.log(res);
