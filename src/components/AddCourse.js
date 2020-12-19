@@ -71,7 +71,7 @@ function AddCourse() {
 	};
   
     const handleSubmit = (e) => {
-   //  e.preventDefault();
+        e.preventDefault();
         axios.post(`http://localhost:3001/courses`, course)
         .then(res => {
             console.log(res);
