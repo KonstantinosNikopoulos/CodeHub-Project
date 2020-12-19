@@ -1,176 +1,169 @@
-import React, {useState, useEffect}  from "react";
+import React, {useState} from "react";
+import {useLocation, Redirect} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
-import Jumbotron from "react-bootstrap/Jumbotron";
-import Card from "react-bootstrap/Card";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
-import { FcInfo } from 'react-icons/fc';
-import { BsCheck, BsX } from 'react-icons/bs';
-import Moment from 'moment';
-import {Link} from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import axios from 'axios';
 
-import axios from "axios";
+function EditCourse() {
 
+    const [redirect, setRedirect] = useState(false);
+    let location = useLocation();
 
-const Welcome = () => {
-    return (
-        <Jumbotron className='mt-4'>
-            <h1>Welcome to CodeHub Dashboard!</h1>
-            <p style={{fontSize: "20px"}}>Manage everything and have fun!</p>    
-        </Jumbotron>
+    const [course, setCourse] = useState(
+        {
+            "id": location.state.id,
+            "title": location.state.title,
+            "imagePath": location.state.imagePath,
+            "price": {
+                "normal": location.state.price.normal,
+                "early_bird": location.state.price.early_bird
+            },
+            "dates": {
+                "start_date": location.state.dates.start_date,
+                "end_date": location.state.dates.end_date
+            },
+            "duration": location.state.duration,
+            "open": location.state.open,
+            "instructors": location.state.instructors,
+            "description": location.state.description
+            }
     );
-}
 
-const Statistics = () => {
-    const [stats, setStats] = useState([]);
 
-        useEffect(() => {
-            axios.get(`http://localhost:3001/stats`)
-            .then(res => {
-                const stats = res.data;
-                setStats(stats);
-            });
-        }, [])
+    const handleChange = (event) => {
+        setCourse({...course, [event.target.id]: event.target.value})
+    };
+
+    const handleChangeOpen = (event) => {
+        setCourse({...course, 
+          [event.target.id]: event.target.checked})
+    };
+
+    const handleChangeInstructors = (event) => {
+        const options = course.instructors;
+         if (event.target.checked){
+              options.push(event.target.value)
+         }
+         else {
+           let index = options.indexOf(event.target.value);
+           options.splice(index, 1);
+         }
+         setCourse({...course,
+           [event.target.id]: options })
+   };
+
+
+    const handleChangeDates = (event) => {
+            const dates = course.dates;
+            const dates_id = "dates";
+            dates[event.target.id] = event.target.value;
+            setCourse({...course, 
+            [dates_id]: dates})
+    };
+
+    const handleChangePrice = (event) => {
+            const price = course.price;
+            const price_id = "price";
+            price[event.target.id] = parseInt(event.target.value);
+            setCourse({...course, 
+            [price_id]: price})
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axios.put(`http://localhost:3001/courses/` + location.state.id, course) 
+        .then(res => {
+            console.log(res);
+            console.log(res.data);
+            setRedirect(true);
+        });
+    };
+
+    //  REDIRECT TO ALL COURSES PAGE WHEN UPDATE IS CLICKED
+    if (redirect) {
+            return <Redirect to='/courses'/>;
+    }
+
 
     return (
         <React.Fragment>
-                <Row>
-                <Col md={1}></Col> 
-                {stats.map(stat => {
-                    return (
-                        <div key={stat.id}>
-                          <Col md={1}></Col>      
-                            <Col md={2}>
-                              <Card style={{ width: '15rem' , height: '4rem'}} className="text-center">
-                                    <Card.Body style={{ textTransform: 'uppercase'}}>{stat.title}: {stat.amount}</Card.Body>
-                               </Card>
-                            </Col>
-                        </div>
-                    )
-                    })
-                }
-                </Row>
+            <Form onSubmit={handleSubmit} className='p-5 mb-4' style={{backgroundColor: '#f1f1f1'}}>
+    
+             <h3>Edit Course: {location.state.title}</h3>
+             <br />
+              <Form.Group onChange={handleChange} controlId="title">
+                <Form.Label>Title:</Form.Label>
+                <Form.Control placeholder={location.state.title}/>
+              </Form.Group>    
+    
+              <Form.Group onChange={handleChange} controlId="duration">
+                <Form.Label>Duration:</Form.Label>
+                <Form.Control placeholder={location.state.duration}/>
+              </Form.Group>  
+    
+              <Form.Group onChange={handleChange} controlId="imagePath">
+                <Form.Label>Image path:</Form.Label>
+                <Form.Control placeholder={location.state.imagePath}/>
+              </Form.Group>  
+    
+              <Form.Group  controlId="open" >
+                 <Form.Check type="checkbox" label="Bookable" onChange={handleChangeOpen} checked={course.open} />
+              </Form.Group>
+    
+              <hr/>
+    
+              <h3>Instructors</h3>
+    
+              <Form.Group controlId="instructors" >
+                 <Form.Check type="checkbox" label="John Tsevdos" name="01" value="01" checked= {course.instructors.includes("01")} onChange={handleChangeInstructors} />
+                 <Form.Check type="checkbox" label="Yannis Nikolakopoulos" name="02" value="02" checked={course.instructors.includes("02")} onChange={handleChangeInstructors} />
+              </Form.Group>
+             
+              <hr/>
+    
+              <Form.Group onChange={handleChange} controlId="description">
+                <Form.Label>Description:</Form.Label>
+                <Form.Control placeholder={location.state.description} as="textarea" rows="2"/>
+              </Form.Group>  
+    
+              <hr/>
+    
+              <h3>Dates</h3>
+    
+              <Form.Group onChange={handleChangeDates} controlId="start_date">
+                <Form.Label>Start date:</Form.Label>
+                <Form.Control placeholder={location.state.dates.start_date}/>
+              </Form.Group>  
+    
+              <Form.Group onChange={handleChangeDates} controlId="end_date">
+                <Form.Label>End date:</Form.Label>
+                <Form.Control placeholder={location.state.dates.end_date}/>
+              </Form.Group> 
+    
+              <hr/>
+    
+              <Form.Group onChange={handleChangePrice} controlId="early_bird">
+                <Form.Label>Early Bird:</Form.Label>
+                <Form.Control placeholder={location.state.price.early_bird}/>
+              </Form.Group>  
+    
+              <Form.Group onChange={handleChangePrice} controlId="normal">
+                <Form.Label>Normal Price:</Form.Label>
+                <Form.Control placeholder={location.state.price.normal}/>
+              </Form.Group> 
+    
+              <hr/>
+    
+              <Form.Group>
+                 <Button type="submit" className="btn btn-primary float-right"> Update </Button>
+              </Form.Group>
+              
+    
+            
+            </Form>
         </React.Fragment>
-    );      
-}
+      );
+};
 
-const Courses = () => {
-    const [courses, setCourses] = useState([]);
-
-        useEffect(() => {
-            axios.get(`http://localhost:3001/courses`)
-            .then(res => {
-                const courses = res.data;
-                setCourses(courses);
-            });
-        }, [])
-
-
-        // if there are more than 5 courses, show the last 5 with slice
-        // else, show them all
-        if (courses.length > 5) {
-            return (
-                <div>
-                    <h4 className="m-4">Last 5 Courses</h4>
-                    <Table striped hover>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Title</th>
-                            <th>Bookable</th>
-                            <th>Price</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {courses.slice(courses.length - 5, courses.length).map(course => {
-                        const isOpen = course.open;
-                        return (
-                            <tr key={course.id}>
-                                <td><FcInfo /> </td>
-                                <td>{course.title}</td>
-                                <td>{isOpen ? <BsCheck /> : <BsX />}</td>
-                                <td> {Moment(course.dates.start_date).format('DD/MM/YYYY')} - {Moment(course.dates.end_date).format('DD/MM/YYYY')} </td>
-                                <td><Button variant="info">View details</Button></td>
-                            </tr>
-                        )
-                    })
-                    }
-                    </tbody>
-                </Table>
-                <div className="text-center mt-3"> 
-                      <Button variant="primary" size="lg">View All Courses</Button>
-                </div> 
-                </div>
-            )
-        }
-        else {
-            return (
-                <div>
-                    <h4 className="m-4">Last 5 Courses</h4>
-                    <Table striped hover>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Title</th>
-                            <th>Bookable</th>
-                            <th>Price</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {courses.map(course => {
-                        const isOpen = course.open;
-                        return (
-                            <tr key={course.id}>
-                                <td><FcInfo /> </td>
-                                <td>{course.title}</td>
-                                <td>{isOpen ? <BsCheck /> : <BsX />}</td>
-                                <td>{course.price.normal}</td>
-                                <td> {Moment(course.dates.start_date).format('DD/MM/YYYY')} - {Moment(course.dates.end_date).format('DD/MM/YYYY')}</td>
-                                <td>
-                                    <Link to={
-                                        {     
-                                            pathname: '/coursedetails',
-                                            state: course
-                                        }
-                                    }> 
-                                        <Button variant="info">View details</Button>
-                                    </Link>
-                                </td>
-                            </tr>
-                        )
-                    })
-                    
-                    }
-                    </tbody>
-                </Table>
-                <div className="text-center mt-3"> 
-                        <Link to="/courses">
-                           <Button variant="primary" size="lg">View All Courses</Button>
-                        </Link>  
-                </div> 
-            </div>   
-            )
-        }
-}
-
-
-function Dashboard () {
-    return (
-        <React.Fragment>
-            <Welcome />
-            <Statistics/>
-            <br />
-            <br />
-            <br />
-            <Courses />
-         </React.Fragment>
-    )
-}
-
-export default Dashboard
+export default EditCourse;
