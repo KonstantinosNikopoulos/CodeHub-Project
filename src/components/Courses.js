@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect}  from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Card from 'react-bootstrap/Card';
@@ -24,7 +23,7 @@ function Courses() {
     return (
         <React.Fragment>
             <br/>
-            <h1>All Courses</h1>
+            <h1 className="ml-3">All Courses</h1>
             <br/>
             <Row className="ml-3 ml-lg-0">
             {courses.map(course => {
@@ -75,3 +74,6 @@ function Courses() {
         
 
 export default Courses;
+
+
+
