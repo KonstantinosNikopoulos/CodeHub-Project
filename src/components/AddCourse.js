@@ -33,7 +33,7 @@ function AddCourse() {
   
   const handleChange = (event) => {
         setCourse({...course, [event.target.id]: event.target.value})
-        console.log(event.target.id)
+        //console.log(event.target.id)
   };
   
   const handleChangeOpen = (event) => {
@@ -77,8 +77,8 @@ function AddCourse() {
         e.preventDefault();
         axios.post(`http://localhost:3001/courses`, course)
         .then(res => {
-            console.log(res);
-            console.log(res.data);
+            //console.log(res);
+            //console.log(res.data);
             setRedirect(true);
         });
     };
