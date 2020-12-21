@@ -74,8 +74,8 @@ function EditCourse() {
         e.preventDefault();
         axios.put(`http://localhost:3001/courses/` + location.state.id, course) 
         .then(res => {
-            console.log(res);
-            console.log(res.data);
+            //console.log(res);
+            //console.log(res.data);
             setRedirect(true);
         });
     };
